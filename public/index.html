@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlueChat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login" id="login">
+  <h1>BlueChat</h1>
+  <input type="text" id="username" placeholder="Enter your name">
+  <button onclick="joinChat()">Join Chat</button>
+</div>
+
+<div class="chat hidden" id="chat">
+  <header>
+    BlueChat
+    <span id="onlineCount" class="online-count">0 online</span>
+  </header>
+
+  <div class="messages" id="messages"></div>
+  <div class="typing" id="typing"></div>
+
+  <div class="input-area">
+    <input type="text" id="messageInput" placeholder="Type a message" oninput="typingEvent()">
+    <button onclick="sendMessage()">➤</button>
+    <button id="emojiBtn">😀</button>
+  </div>
+
+  <div class="emoji-picker hidden" id="emojiPicker"></div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

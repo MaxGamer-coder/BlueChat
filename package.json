@@ -1,0 +1,16 @@
+{
+  "name": "bluechat",
+  "version": "1.0.0",
+  "description": "Real-time chat demo for CV",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["chat", "socket.io", "nodejs", "demo", "CV"],
+  "author": "Tankiso Tsotetsi",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.1"
+  }
+}

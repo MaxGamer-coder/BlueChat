@@ -6,6 +6,14 @@ let latestOnlineUsers = [];
 
 const getFallback = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`;
 
+// Force scroll when keyboard opens
+const msgInput = document.getElementById('messageInput');
+if(msgInput) {
+    msgInput.addEventListener('focus', () => {
+        setTimeout(scrollToBottom, 300);
+    });
+}
+
 window.handlePFPSelect = (input) => {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -17,7 +25,7 @@ window.handlePFPSelect = (input) => {
                 const ctx = canvas.getContext('2d');
                 canvas.width = 100; canvas.height = 100;
                 ctx.drawImage(img, 0, 0, 100, 100);
-                userPFP = canvas.toDataURL('image/jpeg', 0.7); 
+                userPFP = canvas.toDataURL('image/jpeg', 0.6); 
                 document.getElementById('pfpPreview').src = userPFP;
             };
         };
@@ -76,6 +84,7 @@ window.openChat = (targetName, targetPFP, roomID) => {
     socket.emit("joinPrivateRoom", roomID);
     document.getElementById("dashboard").classList.add("hidden");
     document.getElementById("chat").classList.remove("hidden");
+    scrollToBottom();
 };
 
 window.backToDashboard = () => {
@@ -97,8 +106,10 @@ socket.on("message", (msg) => {
     const history = JSON.parse(localStorage.getItem(msg.room)) || [];
     history.push(msg);
     localStorage.setItem(msg.room, JSON.stringify(history));
-    if (currentRoom === msg.room) renderMessage(msg);
-    else {
+    if (currentRoom === msg.room) {
+        renderMessage(msg);
+        scrollToBottom();
+    } else {
         notifications[msg.room] = (notifications[msg.room] || 0) + 1;
         renderUserList(); 
     }
@@ -120,6 +131,10 @@ function renderMessage(msg) {
             </span>
         </div>`;
     messages.appendChild(wrapper);
+}
+
+function scrollToBottom() {
+    const messages = document.getElementById("messages");
     messages.scrollTop = messages.scrollHeight;
 }
 
@@ -145,7 +160,7 @@ window.startRecording = async () => {
         };
         mediaRecorder.start();
         document.getElementById("voiceBtn").classList.add("recording");
-    } catch (err) { alert("Mic needed"); }
+    } catch (err) { alert("Mic permission needed"); }
 };
 
 window.stopRecording = () => {

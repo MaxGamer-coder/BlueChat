@@ -5,7 +5,7 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { 
-  maxHttpBufferSize: 1e8 
+  maxHttpBufferSize: 1e8 // 100MB for media
 });
 
 app.use(express.static("public"));

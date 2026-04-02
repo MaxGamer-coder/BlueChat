@@ -1,35 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BlueChat</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volt Chat</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="login" id="login">
-  <h1>BlueChat</h1>
-  <input type="text" id="username" placeholder="Enter your name">
-  <button onclick="joinChat()">Join Chat</button>
+    <h1>Volt</h1>
+    <div class="pfp-upload" onclick="document.getElementById('pfpInput').click()">
+        <img id="pfpPreview" src="https://ui-avatars.com/api/?name=?&background=007bff&color=fff">
+    </div>
+    <input type="file" id="pfpInput" accept="image/*" hidden onchange="handlePFPSelect(this)">
+    <input type="text" id="username" placeholder="Enter your name">
+    <button onclick="joinChat()">Join Chat</button>
+</div>
+
+<div class="dashboard hidden" id="dashboard">
+    <header>Volt <button onclick="logout()" class="logout-btn">Logout</button></header>
+    <div id="userList" class="user-list-container"></div>
 </div>
 
 <div class="chat hidden" id="chat">
-  <header>
-    BlueChat
-    <span id="onlineCount" class="online-count">0 online</span>
-  </header>
-
-  <div class="messages" id="messages"></div>
-  <div class="typing" id="typing"></div>
-
-  <div class="input-area">
-    <input type="text" id="messageInput" placeholder="Type a message" oninput="typingEvent()">
-    <button onclick="sendMessage()">➤</button>
-    <button id="emojiBtn">😀</button>
-  </div>
-
-  <div class="emoji-picker hidden" id="emojiPicker"></div>
+    <header>
+        <button onclick="backToDashboard()" class="back-btn">←</button>
+        <img id="chatPartnerPFP" class="header-avatar" src="">
+        <span id="chatPartnerName">Chat</span>
+    </header>
+    
+    <div class="messages" id="messages"></div>
+    
+    <div id="imagePreviewContainer" class="image-preview-container hidden">
+        <img id="imagePreview" src="">
+        <button onclick="clearImagePreview()">×</button>
+    </div>
+    
+    <div class="input-area">
+        <div id="emojiPicker" class="emoji-picker hidden">
+            <span onclick="addEmoji('😀')">😀</span><span onclick="addEmoji('😂')">😂</span>
+            <span onclick="addEmoji('😍')">😍</span><span onclick="addEmoji('🔥')">🔥</span>
+            <span onclick="addEmoji('💀')">💀</span><span onclick="addEmoji('💙')">💙</span>
+        </div>
+        <button onclick="toggleEmojiPicker()">😀</button>
+        <button onclick="document.getElementById('imageInput').click()">📎</button>
+        <input type="file" id="imageInput" accept="image/*" hidden onchange="handleImageSelect(this)">
+        <input type="text" id="messageInput" placeholder="Type a message">
+        <button id="voiceBtn" onmousedown="startRecording()" onmouseup="stopRecording()" ontouchstart="startRecording()" ontouchend="stopRecording()">🎤</button>
+        <button onclick="sendMessage()">➤</button>
+    </div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

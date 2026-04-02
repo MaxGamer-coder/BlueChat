@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Volt Chat</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -25,9 +25,11 @@
 
 <div class="chat hidden" id="chat">
     <header>
-        <button onclick="backToDashboard()" class="back-btn">←</button>
-        <img id="chatPartnerPFP" class="header-avatar" src="">
-        <span id="chatPartnerName">Chat</span>
+        <div style="display: flex; align-items: center;">
+            <button onclick="backToDashboard()" class="back-btn">←</button>
+            <img id="chatPartnerPFP" class="header-avatar" src="">
+            <span id="chatPartnerName">Chat</span>
+        </div>
     </header>
     
     <div class="messages" id="messages"></div>

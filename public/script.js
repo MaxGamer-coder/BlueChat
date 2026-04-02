@@ -2,7 +2,7 @@ const socket = io();
 let username = "", userPFP = "", currentRoom = "";
 let pendingImage = "", mediaRecorder, audioChunks = [];
 let notifications = {}; 
-let latestOnlineUsers = []; // Stores the current list of online people
+let latestOnlineUsers = [];
 
 const getFallback = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`;
 
@@ -17,7 +17,7 @@ window.handlePFPSelect = (input) => {
                 const ctx = canvas.getContext('2d');
                 canvas.width = 100; canvas.height = 100;
                 ctx.drawImage(img, 0, 0, 100, 100);
-                userPFP = canvas.toDataURL('image/jpeg', 0.8); 
+                userPFP = canvas.toDataURL('image/jpeg', 0.7); 
                 document.getElementById('pfpPreview').src = userPFP;
             };
         };
@@ -35,7 +35,6 @@ window.joinChat = () => {
     document.getElementById("dashboard").classList.remove("hidden");
 };
 
-// --- USER LIST RENDERING ---
 function renderUserList() {
     const list = document.getElementById("userList");
     list.innerHTML = "";
@@ -43,7 +42,6 @@ function renderUserList() {
         if (user.username === username) return;
         const roomID = [username, user.username].sort().join("_");
         const count = notifications[roomID] || 0;
-        
         const div = document.createElement("div");
         div.className = "user-item";
         div.onclick = () => openChat(user.username, user.pfp, roomID);
@@ -66,18 +64,15 @@ socket.on("onlineUpdate", (users) => {
 
 window.openChat = (targetName, targetPFP, roomID) => {
     currentRoom = roomID;
-    notifications[roomID] = 0; // Clear notifications
-    renderUserList(); // Update the list immediately to remove the badge
-    
+    notifications[roomID] = 0;
+    renderUserList();
     document.getElementById("chatPartnerName").textContent = targetName;
     const headerImg = document.getElementById("chatPartnerPFP");
     headerImg.src = targetPFP;
     headerImg.onerror = () => { headerImg.src = getFallback(targetName); };
-    
     document.getElementById("messages").innerHTML = "";
     const history = JSON.parse(localStorage.getItem(roomID)) || [];
     history.forEach(msg => renderMessage(msg));
-    
     socket.emit("joinPrivateRoom", roomID);
     document.getElementById("dashboard").classList.add("hidden");
     document.getElementById("chat").classList.remove("hidden");
@@ -90,7 +85,6 @@ window.backToDashboard = () => {
     renderUserList();
 };
 
-// --- MESSAGING ---
 window.sendMessage = () => {
     const input = document.getElementById("messageInput");
     if (!input.value.trim() && !pendingImage) return;
@@ -103,11 +97,8 @@ socket.on("message", (msg) => {
     const history = JSON.parse(localStorage.getItem(msg.room)) || [];
     history.push(msg);
     localStorage.setItem(msg.room, JSON.stringify(history));
-    
-    if (currentRoom === msg.room) {
-        renderMessage(msg);
-    } else {
-        // If message is for another room, increment count and RE-RENDER LIST
+    if (currentRoom === msg.room) renderMessage(msg);
+    else {
         notifications[msg.room] = (notifications[msg.room] || 0) + 1;
         renderUserList(); 
     }
@@ -121,7 +112,7 @@ function renderMessage(msg) {
     wrapper.innerHTML = `
         <img class="avatar" src="${msg.pfp}" onerror="this.src='${getFallback(msg.user)}'">
         <div class="message">
-            ${msg.image ? `<img src="${msg.image}" class="chat-image">` : ""}
+            ${msg.image ? `<img src="${msg.image}" class="chat-image" onclick="window.open('${msg.image}')">` : ""}
             ${msg.audio ? `<audio controls class="voice-note" src="${msg.audio}"></audio>` : ""}
             ${msg.text ? `<p>${msg.text}</p>` : ""}
             <span style="font-size:10px; opacity:0.6; display:block; text-align:right; margin-top:5px;">
@@ -132,9 +123,11 @@ function renderMessage(msg) {
     messages.scrollTop = messages.scrollHeight;
 }
 
-// --- UTILITIES ---
 window.toggleEmojiPicker = () => document.getElementById("emojiPicker").classList.toggle("hidden");
-window.addEmoji = (emoji) => { document.getElementById("messageInput").value += emoji; };
+window.addEmoji = (emoji) => { 
+    document.getElementById("messageInput").value += emoji; 
+    document.getElementById("emojiPicker").classList.add("hidden");
+};
 
 window.startRecording = async () => {
     try {
@@ -162,7 +155,6 @@ window.stopRecording = () => {
     }
 };
 
-window.logout = () => { localStorage.clear(); location.reload(); };
 window.handleImageSelect = (input) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -172,7 +164,10 @@ window.handleImageSelect = (input) => {
     };
     reader.readAsDataURL(input.files[0]);
 };
+
 window.clearImagePreview = () => {
     pendingImage = "";
     document.getElementById("imagePreviewContainer").classList.add("hidden");
 };
+
+window.logout = () => { localStorage.clear(); location.reload(); };

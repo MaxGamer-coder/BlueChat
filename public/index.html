@@ -43,12 +43,14 @@
     </div>
     
     <div class="input-area">
-        <button onclick="toggleEmojiPicker()">😀</button>
-        <button onclick="document.getElementById('imageInput').click()">📎</button>
+        <button type="button" onclick="toggleEmojiPicker()" class="icon-btn">😀</button>
+        <button type="button" onclick="document.getElementById('imageInput').click()" class="icon-btn">📎</button>
         <input type="file" id="imageInput" accept="image/*" hidden onchange="handleImageSelect(this)">
-        <input type="text" id="messageInput" placeholder="Type a message" autocomplete="off">
-        <button id="voiceBtn" onmousedown="startRecording()" onmouseup="stopRecording()" ontouchstart="startRecording()" ontouchend="stopRecording()">🎤</button>
-        <button onclick="sendMessage()">➤</button>
+        
+        <input type="text" id="messageInput" placeholder="Message" autocomplete="off">
+        
+        <button type="button" id="voiceBtn" class="icon-btn" onmousedown="startRecording()" onmouseup="stopRecording()" ontouchstart="startRecording()" ontouchend="stopRecording()">🎤</button>
+        <button type="button" onclick="sendMessage()" class="send-btn">➤</button>
         
         <div id="emojiPicker" class="emoji-picker hidden">
             <span onclick="addEmoji('😀')">😀</span><span onclick="addEmoji('😂')">😂</span>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Volt Chat</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -19,7 +19,10 @@
 </div>
 
 <div class="dashboard hidden" id="dashboard">
-    <header>Volt <button onclick="logout()" class="logout-btn">Logout</button></header>
+    <header>
+        <span>Volt</span>
+        <button onclick="logout()" class="logout-btn">Logout</button>
+    </header>
     <div id="userList" class="user-list-container"></div>
 </div>
 
@@ -40,17 +43,18 @@
     </div>
     
     <div class="input-area">
+        <button onclick="toggleEmojiPicker()">😀</button>
+        <button onclick="document.getElementById('imageInput').click()">📎</button>
+        <input type="file" id="imageInput" accept="image/*" hidden onchange="handleImageSelect(this)">
+        <input type="text" id="messageInput" placeholder="Type a message" autocomplete="off">
+        <button id="voiceBtn" onmousedown="startRecording()" onmouseup="stopRecording()" ontouchstart="startRecording()" ontouchend="stopRecording()">🎤</button>
+        <button onclick="sendMessage()">➤</button>
+        
         <div id="emojiPicker" class="emoji-picker hidden">
             <span onclick="addEmoji('😀')">😀</span><span onclick="addEmoji('😂')">😂</span>
             <span onclick="addEmoji('😍')">😍</span><span onclick="addEmoji('🔥')">🔥</span>
             <span onclick="addEmoji('💀')">💀</span><span onclick="addEmoji('💙')">💙</span>
         </div>
-        <button onclick="toggleEmojiPicker()">😀</button>
-        <button onclick="document.getElementById('imageInput').click()">📎</button>
-        <input type="file" id="imageInput" accept="image/*" hidden onchange="handleImageSelect(this)">
-        <input type="text" id="messageInput" placeholder="Type a message">
-        <button id="voiceBtn" onmousedown="startRecording()" onmouseup="stopRecording()" ontouchstart="startRecording()" ontouchend="stopRecording()">🎤</button>
-        <button onclick="sendMessage()">➤</button>
     </div>
 </div>
 

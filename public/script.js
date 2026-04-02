@@ -6,7 +6,6 @@ let latestOnlineUsers = [];
 
 const getFallback = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`;
 
-// Force scroll when keyboard opens
 const msgInput = document.getElementById('messageInput');
 if(msgInput) {
     msgInput.addEventListener('focus', () => {
@@ -121,7 +120,6 @@ function renderMessage(msg) {
     const wrapper = document.createElement("div");
     wrapper.className = `message-wrapper ${isSelf ? 'self' : 'other'}`;
     wrapper.innerHTML = `
-        <img class="avatar" src="${msg.pfp}" onerror="this.src='${getFallback(msg.user)}'">
         <div class="message">
             ${msg.image ? `<img src="${msg.image}" class="chat-image" onclick="window.open('${msg.image}')">` : ""}
             ${msg.audio ? `<audio controls class="voice-note" src="${msg.audio}"></audio>` : ""}
@@ -159,14 +157,14 @@ window.startRecording = async () => {
             };
         };
         mediaRecorder.start();
-        document.getElementById("voiceBtn").classList.add("recording");
+        document.getElementById("voiceBtn").style.color = "red";
     } catch (err) { alert("Mic permission needed"); }
 };
 
 window.stopRecording = () => {
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
-        document.getElementById("voiceBtn").classList.remove("recording");
+        document.getElementById("voiceBtn").style.color = "#666";
     }
 };
 
